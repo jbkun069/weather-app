@@ -1,146 +1,109 @@
-/* Main App Container */
+/* Base App Container */
 .App {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
   padding: 20px;
-  background: linear-gradient(135deg, #6dd5ed, #2193b0);
   font-family: 'Arial', sans-serif;
+  z-index: 1;
 }
 
-/* Header */
+/* Gradient Overlay */
+.App::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(109, 213, 237, 0.8), rgba(33, 147, 176, 0.8));
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Content Wrapper */
+.content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Header Styles */
 h1 {
-  color: white;
+  color: #ffffff;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
   margin-bottom: 30px;
-  font-size: 2.5em;
 }
 
 /* Search Bar Styles */
 .search-bar {
+  width: 100%;
+  max-width: 500px;
+  margin-bottom: 30px;
   display: flex;
   gap: 10px;
-  width: 100%;
-  max-width: 400px;
-  margin: 20px 0;
 }
 
 .search-bar input {
   flex: 1;
-  padding: 12px;
+  padding: 12px 20px;
   border: none;
   border-radius: 25px;
+  background: rgba(255, 255, 255, 0.9);
   font-size: 16px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   outline: none;
+  transition: box-shadow 0.3s ease;
+}
+
+.search-bar input:focus {
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
 .search-bar button {
-  padding: 12px 25px;
-  background-color: #4CAF50;
-  color: white;
+  padding: 12px 30px;
   border: none;
   border-radius: 25px;
-  cursor: pointer;
+  background: #2193b0;
+  color: white;
   font-size: 16px;
+  cursor: pointer;
   transition: background-color 0.3s ease;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .search-bar button:hover {
-  background-color: #45a049;
+  background: #1c7a94;
 }
 
 /* Weather Display Styles */
 .weather-display {
   background: rgba(255, 255, 255, 0.9);
+  padding: 30px;
   border-radius: 15px;
-  padding: 25px;
-  margin-top: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 400px;
+  max-width: 500px;
+  margin-top: 20px;
 }
 
 .weather-display h2 {
   color: #333;
   margin-bottom: 20px;
-  font-size: 1.8em;
   text-align: center;
 }
 
 .current-weather {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
+  text-align: center;
 }
 
-.current-weather h3 {
-  color: #444;
-  margin-bottom: 10px;
-  font-size: 1.4em;
-}
-
-.current-weather p {
-  color: #666;
-  margin: 5px 0;
-  font-size: 1.1em;
-}
-
-/* Weather Icon Styles */
 .weather-icon {
   margin: 20px 0;
-  transition: color 0.3s ease;
-}
-
-.weather-icon svg {
-  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.2));
-  width: 80px;
-  height: 80px;
-}
-
-/* Loading State */
-.loading {
-  color: white;
-  font-size: 1.2em;
-  margin: 20px 0;
-  text-align: center;
-}
-
-/* Error Message */
-.error {
-  color: #ff3d00;
-  background-color: rgba(255, 255, 255, 0.9);
-  padding: 15px;
-  border-radius: 10px;
-  margin: 20px 0;
-  text-align: center;
-  width: 100%;
-  max-width: 400px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Responsive Design */
-@media (max-width: 480px) {
-  .App {
-    padding: 15px;
-  }
-
-  h1 {
-    font-size: 2em;
-  }
-
-  .weather-display {
-    padding: 15px;
-  }
-
-  .search-bar {
-    flex-direction: column;
-  }
-
-  .search-bar button {
-    width: 100%;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

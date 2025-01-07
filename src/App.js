@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import WeatherDisplay from './components/WeatherDisplay';
 import SearchBar from './components/SearchBar';
+import Background3D from './components/Background3D';
 import './App.css';
 
 const API_KEY = 'SR8WJEYWM8AH696DNKP93ZWHN';
@@ -55,13 +56,19 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Weather App</h1>
-      <SearchBar onSearch={fetchWeather} />
-      {error && <div className="error">{error}</div>}
-      {loading && <div className="loading">Loading...</div>}
-      {!loading && !error && <WeatherDisplay data={weatherData} />}
+      <Background3D 
+        weatherCondition={weatherData?.currentConditions?.conditions}
+        temperature={weatherData?.currentConditions?.temp}
+      />
+      <div className="content">
+        <h1>Weather App</h1>
+        <SearchBar onSearch={fetchWeather} />
+        {error && <div className="error">{error}</div>}
+        {loading && <div className="loading">Loading...</div>}
+        {!loading && !error && <WeatherDisplay data={weatherData} />}
+      </div>
     </div>
   );
 }
 
-export default App; 
+export default App;
