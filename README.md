@@ -19,3 +19,10 @@ A React-based weather application that provides real-time weather information us
 - JavaScript (ES6+)
 
 ## Project Structure 
+
+- src/components/
+- src/pages/
+- src/App.js
+- src/index.js
+- src/App.css
+- src/index.css
