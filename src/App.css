@@ -1,16 +1,16 @@
 /* Base App Container */
 .App {
-  position: relative;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1025 0%, #2d1b4b 100%);
+  padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 100vh;
-  padding: 20px;
-  font-family: 'Arial', sans-serif;
-  z-index: 1;
+  position: relative;
+  overflow: hidden;
 }
 
-/* Gradient Overlay */
+/* Starry background effect */
 .App::before {
   content: '';
   position: fixed;
@@ -18,20 +18,85 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, rgba(109, 213, 237, 0.8), rgba(33, 147, 176, 0.8));
-  z-index: -1;
-  pointer-events: none;
+  background-image: 
+    radial-gradient(2px 2px at 20px 30px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 40px 70px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 50px 160px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 90px 40px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 130px 80px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 160px 120px, #ffffff, rgba(0,0,0,0));
+  background-repeat: repeat;
+  animation: twinkle 4s ease-in-out infinite alternate;
+  z-index: 0;
 }
 
-/* Content Wrapper */
+/* Additional star layers for depth */
+.App::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(1px 1px at 150px 15px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 185px 100px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 200px 80px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 250px 60px, #ffffff, rgba(0,0,0,0));
+  background-repeat: repeat;
+  animation: twinkle 6s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+@keyframes twinkle {
+  from {
+    opacity: 0.4;
+  }
+  to {
+    opacity: 0.8;
+  }
+}
+
+/* Purple gradient overlay */
+.gradient-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at top right, 
+    rgba(155, 109, 255, 0.1) 0%, 
+    rgba(107, 47, 217, 0.2) 50%,
+    rgba(26, 16, 37, 0.3) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
 .content {
   position: relative;
-  z-index: 2;
   width: 100%;
-  max-width: 800px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  max-width: 420px;
+  margin: 0 auto;
+  z-index: 2;
+}
+
+/* Glowing effect for certain elements */
+.weather-card {
+  position: relative;
+}
+
+.weather-card::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #6B2FD9, #9B6DFF);
+  border-radius: 26px;
+  z-index: -1;
+  opacity: 0.3;
+  filter: blur(8px);
 }
 
 /* Header Styles */
@@ -106,4 +171,28 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+/* Add these styles to your existing App.css */
+
+.app-header {
+  text-align: left;
+  margin-bottom: 40px;
+  padding: 20px;
+}
+
+.app-title {
+  font-size: 48px;
+  font-weight: bold;
+  color: white;
+  margin: 0;
+  line-height: 1;
+}
+
+.app-subtitle {
+  font-size: 42px;
+  font-weight: bold;
+  color: #FFB800;  /* Golden yellow color */
+  margin: 0;
+  line-height: 1;
 }

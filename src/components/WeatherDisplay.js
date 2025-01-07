@@ -1,82 +1,105 @@
 import React from 'react';
-import { 
-  WiDaySunny, 
-  WiCloudy, 
-  WiRain, 
-  WiSnow, 
-  WiThunderstorm, 
-  WiFog,
-  WiDayCloudy
-} from 'react-icons/wi';
+import { WiCloud, WiDaySunny, WiRain, WiStrongWind } from 'react-icons/wi';
+import './WeatherDisplay.css';
 
 function WeatherDisplay({ data }) {
   if (!data) return null;
 
-  const getWeatherIcon = (conditions, temp) => {
-    const condition = conditions.toLowerCase();
-    const iconSize = 50;
-
-    // Dynamic color based on temperature
-    const getTemperatureColor = (temp) => {
-      if (temp >= 30) return '#ff5722';      // Hot (orange-red)
-      if (temp >= 20) return '#ff9800';      // Warm (orange)
-      if (temp >= 10) return '#ffc107';      // Mild (amber)
-      if (temp >= 0) return '#4caf50';       // Cool (green)
-      return '#2196f3';                      // Cold (blue)
-    };
-
-    // Dynamic color based on condition
-    const getConditionColor = (condition) => {
-      if (condition.includes('rain')) return '#2196f3';     // Blue
-      if (condition.includes('snow')) return '#90a4ae';     // Blue-grey
-      if (condition.includes('cloud')) return '#757575';    // Grey
-      if (condition.includes('clear') || 
-          condition.includes('sunny')) return '#ffd700';    // Gold
-      if (condition.includes('thunder')) return '#5c6bc0';  // Indigo
-      if (condition.includes('fog')) return '#b0bec5';      // Light grey
-      return '#78909c';                                     // Default grey
-    };
-
-    const iconColor = condition.includes('rain') || 
-                     condition.includes('snow') || 
-                     condition.includes('fog') 
-                     ? getConditionColor(condition) 
-                     : getTemperatureColor(temp);
-
-    const iconStyle = { color: iconColor };
-
-    switch (true) {
-      case condition.includes('sunny') || condition.includes('clear'):
-        return <WiDaySunny size={iconSize} style={iconStyle} />;
-      case condition.includes('partly cloudy'):
-        return <WiDayCloudy size={iconSize} style={iconStyle} />;
-      case condition.includes('cloudy') || condition.includes('overcast'):
-        return <WiCloudy size={iconSize} style={iconStyle} />;
-      case condition.includes('rain') || condition.includes('drizzle'):
-        return <WiRain size={iconSize} style={iconStyle} />;
-      case condition.includes('snow') || condition.includes('sleet'):
-        return <WiSnow size={iconSize} style={iconStyle} />;
-      case condition.includes('thunder') || condition.includes('storm'):
-        return <WiThunderstorm size={iconSize} style={iconStyle} />;
-      case condition.includes('fog') || condition.includes('mist'):
-        return <WiFog size={iconSize} style={iconStyle} />;
-      default:
-        return <WiDaySunny size={iconSize} style={iconStyle} />;
+const getWeatherIcon = (iconName) => {
+    switch (iconName) {
+        case 'cloud':
+            return <WiCloud className="weather-icon" />;
+        case 'rain':
+            return <WiRain className="weather-icon" />;
+        case 'wind':
+            return <WiStrongWind className="weather-icon" />;
+        default:
+            return <WiDaySunny className="weather-icon" />;
     }
   };
 
+  const hourlyForecast = data.days?.[0]?.hours?.slice(0, 6).map(hour => ({
+    time: new Date(hour.datetime).getHours(),
+    temp: Math.round(hour.temp),
+    icon: hour.icon,
+    precipitation: hour.precipprob,
+    conditions: hour.conditions
+  }));
+
   return (
-    <div className="weather-display">
-      <h2>{data.address}</h2>
-      <div className="current-weather">
-        <div className="weather-icon">
-          {getWeatherIcon(data.currentConditions.conditions, data.currentConditions.temp)}
+    <div className="weather-card">
+      {/* Main Temperature Display */}
+      <div className="main-temp">
+        <h1>{data.address}</h1>
+        <div className="temp-display">
+          <span className="temperature">{Math.round(data.currentConditions.temp)}°</span>
+          <div className="condition-container">
+            {getWeatherIcon(data.currentConditions.conditions)}
+            <span className="condition">{data.currentConditions.conditions}</span>
+          </div>
         </div>
-        <h3>Current Weather</h3>
-        <p>Temperature: {data.currentConditions.temp}°C</p>
-        <p>Conditions: {data.currentConditions.conditions}</p>
-        <p>Humidity: {data.currentConditions.humidity}%</p>
-        <p>Wind Speed: {data.currentConditions.windspeed} km/h</p>
+        <div className="temp-range">
+          H:{Math.round(data.days[0].tempmax)}° L:{Math.round(data.days[0].tempmin)}°
+        </div>
+      </div>
+
+      {/* Hourly Forecast */}
+      <div className="forecast-section">
+        <h3>Hourly Forecast</h3>
+        <div className="hourly-forecast">
+          {hourlyForecast.map((hour, index) => (
+            <div key={index} className="forecast-hour">
+              <span className="time">{hour.time}:00</span>
+              {getWeatherIcon(hour.conditions)}
+              <span className="temp">{hour.temp}°</span>
+              <span className="precipitation">{hour.precipitation}%</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Additional Weather Info */}
+      <div className="weather-details">
+        <div className="detail-card">
+          <h4>AIR QUALITY</h4>
+          <div className="detail-value">3-Low Health Risk</div>
+        </div>
+        
+        <div className="detail-grid">
+          <div className="detail-item">
+            <h4>UV INDEX</h4>
+            <div className="detail-value">4</div>
+            <div className="detail-label">Moderate</div>
+          </div>
+          
+          <div className="detail-item">
+            <h4>SUNRISE</h4>
+            <div className="detail-value">
+              {new Date(data.currentConditions.sunrise).toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
+              })}
+            </div>
+          </div>
+          
+          <div className="detail-item">
+            <h4>WIND</h4>
+            <div className="detail-value">
+              <WiStrongWind className="detail-icon" />
+              {Math.round(data.currentConditions.windspeed)} km/h
+            </div>
+          </div>
+          
+          <div className="detail-item">
+            <h4>RAINFALL</h4>
+            <div className="detail-value">
+              <WiRain className="detail-icon" />
+              {data.currentConditions.precip} mm
+            </div>
+            <div className="detail-label">in last hour</div>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -2,7 +2,6 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import WeatherDisplay from './components/WeatherDisplay';
 import SearchBar from './components/SearchBar';
-import Background3D from './components/Background3D';
 import './App.css';
 
 const API_KEY = 'SR8WJEYWM8AH696DNKP93ZWHN';
@@ -24,6 +23,7 @@ function App() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
+      console.log('Weather Data:', data);
       setWeatherData(data);
     } catch (err) {
       setError(err.message || 'Failed to fetch weather data');
@@ -54,14 +54,20 @@ function App() {
     getInitialLocation();
   }, []);
 
+  useEffect(() => {
+    console.log('Current Conditions:', weatherData?.currentConditions);
+    console.log('Weather:', weatherData?.currentConditions?.conditions);
+    console.log('Temperature:', weatherData?.currentConditions?.temp);
+  }, [weatherData]);
+
   return (
     <div className="App">
-      <Background3D 
-        weatherCondition={weatherData?.currentConditions?.conditions}
-        temperature={weatherData?.currentConditions?.temp}
-      />
+      <div className="gradient-overlay"></div>
       <div className="content">
-        <h1>Weather App</h1>
+        <div className="app-header">
+          <h1 className="app-title">Weather</h1>
+          <h2 className="app-subtitle">ForeCasts</h2>
+        </div>
         <SearchBar onSearch={fetchWeather} />
         {error && <div className="error">{error}</div>}
         {loading && <div className="loading">Loading...</div>}
